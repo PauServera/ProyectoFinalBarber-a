@@ -1,0 +1,8 @@
+Tenemos dueño de la peluquería, barberos y clientes.
+Todos tendrán el mismo registro o inicio de sesión.
+Cuando te registras tienes 3 opciones, registrarte como dueño, peluquero o cliente.
+Verificación de registro por sms.
+
+Clases:
+- Clase Barberia.
+- Clase Usuario.
