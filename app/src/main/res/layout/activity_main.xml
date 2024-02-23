@@ -14,11 +14,11 @@
 
     <ImageView
         android:id="@+id/imageViewLogo"
-        android:layout_width="173dp"
-        android:layout_height="199dp"
+        android:layout_width="160dp"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:src="@drawable/barberia" />
+        android:src="@drawable/barberteamlogo" />
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -53,7 +53,6 @@
         android:layout_marginTop="16dp"
         android:text="Iniciar sesión"/>
 
-
     <TextView
         android:id="@+id/textViewRegister"
         android:layout_width="wrap_content"
@@ -66,5 +65,14 @@
         android:textColor="#FFFFFF"
         android:textColorLink="#FFFFFF" />
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/btnGoogleSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewRegister"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
 </RelativeLayout>
+
 

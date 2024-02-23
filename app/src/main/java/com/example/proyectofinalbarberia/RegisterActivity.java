@@ -51,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
                     String password = editTextPassword.getText().toString();
                     registrarUsuario(email, password);
                 } else{
-                    Toast.makeText(RegisterActivity.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -69,22 +69,26 @@ public class RegisterActivity extends AppCompatActivity {
 
     //Registro en firebase
     public void registrarUsuario(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("TAG", "createUserWithEmail:success");
-                            Intent intent = new Intent(RegisterActivity.this, rolSelectorActivity.class);
-                            startActivity(intent);
-                            finish();
-                            Toast.makeText(RegisterActivity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Registro fallido", Toast.LENGTH_SHORT).show();
+        if (password.length() >= 6) {
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("TAG", "createUserWithEmail:success");
+                                Intent intent = new Intent(RegisterActivity.this, rolSelectorActivity.class);
+                                startActivity(intent);
+                                finish();
+                                Toast.makeText(RegisterActivity.this, "Registro exitoso.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.w("TAG", "createUserWithEmail:failure", task.getException());
+                                Toast.makeText(RegisterActivity.this, "Registro fallido.", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        } else {
+            Toast.makeText(RegisterActivity.this, "La contraseña debe tener mínimo 6 caracteres.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void cambiarColorBarraDeEstado() {

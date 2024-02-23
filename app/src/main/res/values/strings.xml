@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">proyectoFinalBarberia</string>
+    <string name="default_web_client_id">1034113947509-92rshfe8f6u76kq9k7etcregerr68soj.apps.googleusercontent.com</string>
+    <string name="sign_in_with_google">Sign in with google</string>
 </resources>

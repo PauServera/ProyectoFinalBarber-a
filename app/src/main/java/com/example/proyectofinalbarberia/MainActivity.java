@@ -1,5 +1,7 @@
 package com.example.proyectofinalbarberia;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +17,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.FileReader;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnLogin;
@@ -26,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText editTextemail;
     private EditText editTextpassword;
+    private SignInButton btnGoogleSignIn;
+
+    private static final int RC_SIGN_IN = 123;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Para ir a la pantalla de registro
+        // Para ir a la pantalla de registro
         textviewRegister = findViewById(R.id.textViewRegister);
         textviewRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,9 +79,59 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        // inicio de sesión con Google
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+
+        btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
+        btnGoogleSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signInWithGoogle();
+            }
+        });
     }
 
-    // Login con firebase
+    private void signInWithGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        activityResultLauncher.launch(signInIntent);
+    }
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            o -> {
+                if (o.getResultCode() == RESULT_OK) {
+                    Intent data = o.getData();
+                    GoogleSignInAccount account;
+                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                    try {
+                        account = task.getResult(ApiException.class);
+                        firebaseAuthWithGoogle(account);
+                    } catch (ApiException ignored) {
+                    }
+                }
+            });
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        String usuarioActual = obtenerUidActualUsuario();
+                        verificarExistenciaUidEnFirestore(usuarioActual);
+                    } else {
+                        FirebaseAuthException e = (FirebaseAuthException) task.getException();
+                        Toast.makeText(this, Objects.requireNonNull(e).getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    // Método para iniciar sesión con Firebase
     public void iniciarSesion(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -79,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    // Otros métodos para cambiar el color de la barra de estado
     private void cambiarColorBarraDeEstado() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             cambiarColorBarraDeEstadoAndroidR();
@@ -103,5 +176,37 @@ public class MainActivity extends AppCompatActivity {
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.toolbar_color));
         }
+    }
+
+    private void verificarExistenciaUidEnFirestore(String uid) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usuariosRef = db.collection("Usuarios");
+
+        usuariosRef.document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // El UID ya existe en la colección "Usuarios"
+                        // Redirigir a otra actividad
+                        Intent otroIntent = new Intent(MainActivity.this, PrincipalActivity.class);
+                        startActivity(otroIntent);
+                        finish();
+                    } else {
+                        Intent intentRegistro = new Intent(MainActivity.this, rolSelectorActivity.class);
+                        startActivity(intentRegistro);
+                        finish();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Error al verificar UID en Firestore", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private String obtenerUidActualUsuario() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        return (currentUser != null) ? currentUser.getUid() : null;
     }
 }

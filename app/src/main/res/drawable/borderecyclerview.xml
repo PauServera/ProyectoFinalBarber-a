@@ -1,0 +1,19 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Estado cuando el elemento está presionado -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" />
+            <stroke android:width="2dp" android:color="@android:color/black" />
+        </shape>
+    </item>
+
+    <!-- Estado predeterminado -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" />
+            <stroke android:width="2dp" android:color="@android:color/black" />
+        </shape>
+    </item>
+
+</selector>

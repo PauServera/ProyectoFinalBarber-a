@@ -14,11 +14,11 @@
 
     <ImageView
         android:id="@+id/imageViewLogoRegister"
-        android:layout_width="173dp"
-        android:layout_height="199dp"
+        android:layout_width="160dp"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:src="@drawable/barberia" />
+        android:src="@drawable/barberteamlogo" />
 
     <EditText
         android:id="@+id/editTextEmailRegister"

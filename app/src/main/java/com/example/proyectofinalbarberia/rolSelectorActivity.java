@@ -1,14 +1,21 @@
 package com.example.proyectofinalbarberia;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -59,9 +66,7 @@ public class rolSelectorActivity extends AppCompatActivity {
                 ref.set(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Intent intent = new Intent(rolSelectorActivity.this, PrincipalActivity.class);
-                        startActivity(intent);
-                        finish();
+                        mostrarDialogoNombre();
                     }
                 });
 
@@ -94,9 +99,7 @@ public class rolSelectorActivity extends AppCompatActivity {
                 ref.set(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Intent intent = new Intent(rolSelectorActivity.this, PrincipalActivity.class);
-                        startActivity(intent);
-                        finish();
+                        mostrarDialogoNombre();
                     }
                 });
 
@@ -125,12 +128,58 @@ public class rolSelectorActivity extends AppCompatActivity {
                 ref.set(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        mostrarDialogoNombre();
+                    }
+                });
+            }
+        });
+    }
+
+    private void mostrarDialogoNombre() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialognombre, null);
+
+        final EditText editTextNombre = dialogView.findViewById(R.id.editTextNombre);
+
+        builder.setView(dialogView)
+                .setTitle("Introducir Nombre")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String nombre = editTextNombre.getText().toString();
+                        Toast.makeText(rolSelectorActivity.this, "!Bienvenido, " + nombre + "!", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+
+                        //Guardar nombre en firebase
+                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        CollectionReference usuariosCollection = FirebaseFirestore.getInstance().collection("Usuarios");
+                        DocumentReference usuarioDocument = usuariosCollection.document(userId);
+
+                        usuarioDocument.update("nombre", nombre)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(rolSelectorActivity.this, "!Bienvenido, " + nombre + "!", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(rolSelectorActivity.this, "Error al actualizar el nombre", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                        //Redirijo a la actividad principal
                         Intent intent = new Intent(rolSelectorActivity.this, PrincipalActivity.class);
                         startActivity(intent);
                         finish();
                     }
                 });
-            }
-        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

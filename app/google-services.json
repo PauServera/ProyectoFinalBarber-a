@@ -12,7 +12,20 @@
           "package_name": "com.example.proyectofinalbarberia"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1034113947509-umtrln6pcor172j37lvj8i5qomdf4oiv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.proyectofinalbarberia",
+            "certificate_hash": "93ec887f902e7c7e38c72fa8a4033c13bbdfbdc4"
+          }
+        },
+        {
+          "client_id": "1034113947509-92rshfe8f6u76kq9k7etcregerr68soj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDqJgP4QwK7DPzdlUC9KVdC6ZfWW-IzpSc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1034113947509-92rshfe8f6u76kq9k7etcregerr68soj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
