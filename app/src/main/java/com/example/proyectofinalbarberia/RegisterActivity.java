@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowInsetsController;
@@ -69,6 +70,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     //Registro en firebase
     public void registrarUsuario(String email, String password) {
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Debes rellenar la información de registro", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (password.length() >= 6) {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

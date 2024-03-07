@@ -30,7 +30,6 @@ public class BarberiaAdapter extends RecyclerView.Adapter<BarberiaAdapter.Barber
         Barberia barberia = barberias.get(position);
         holder.nombreTextView.setText(barberia.getNombre());
         holder.ubicacionTextView.setText(barberia.getUbicacion());
-        // Agregar más atributos según sea necesario
     }
 
     @Override

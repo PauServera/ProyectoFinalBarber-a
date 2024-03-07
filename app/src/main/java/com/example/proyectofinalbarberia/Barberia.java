@@ -2,20 +2,31 @@ package com.example.proyectofinalbarberia;
 
 import java.util.List;
 
-public class Barberia {
-    private int id;
-    private String nombre;
-    private Dueño dueñoBarberia;
-    private List<Barbero> barberos;
-    private List<Cliente> clientes;
-    private List<Cita> citas;
-    private String ubicacion;
+import java.util.List;
 
-    public int getId() {
+public class Barberia {
+    private String id;
+    private String nombre;
+    private String ubicacion;
+    private String telefono;
+    private String imageUrl;
+
+    public Barberia() {
+    }
+
+    public Barberia(String id, String nombre, String ubicacion, String telefono, String imageUrl) {
+        this.id = id;
+        this.nombre = nombre;
+        this.ubicacion = ubicacion;
+        this.telefono = telefono;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -27,38 +38,6 @@ public class Barberia {
         this.nombre = nombre;
     }
 
-    public Dueño getDueñoBarberia() {
-        return dueñoBarberia;
-    }
-
-    public void setDueñoBarberia(Dueño dueñoBarberia) {
-        this.dueñoBarberia = dueñoBarberia;
-    }
-
-    public List<Barbero> getBarberos() {
-        return barberos;
-    }
-
-    public void setBarberos(List<Barbero> barberos) {
-        this.barberos = barberos;
-    }
-
-    public List<Cliente> getClientes() {
-        return clientes;
-    }
-
-    public void setClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
-    }
-
-    public List<Cita> getCitas() {
-        return citas;
-    }
-
-    public void setCitas(List<Cita> citas) {
-        this.citas = citas;
-    }
-
     public String getUbicacion() {
         return ubicacion;
     }
@@ -66,4 +45,21 @@ public class Barberia {
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
     }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
+

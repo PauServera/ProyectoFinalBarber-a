@@ -148,7 +148,6 @@ public class rolSelectorActivity extends AppCompatActivity {
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String nombre = editTextNombre.getText().toString();
-                        Toast.makeText(rolSelectorActivity.this, "!Bienvenido, " + nombre + "!", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
 
                         //Guardar nombre en firebase
