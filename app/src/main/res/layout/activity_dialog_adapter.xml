@@ -22,26 +22,4 @@
         android:layout_marginTop="8dp"
         android:textSize="16sp" />
 
-    <ImageButton
-        android:id="@+id/btnEditar"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/editar"
-        android:background="@drawable/selector_boton"
-        android:scaleType="centerInside"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"/>
-
-    <ImageButton
-        android:id="@+id/btnBorrar"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_toStartOf="@id/btnEditar"
-        android:src="@drawable/eliminar"
-        android:background="@drawable/selector_boton"
-        android:scaleType="centerInside"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"/>
-
 </RelativeLayout>

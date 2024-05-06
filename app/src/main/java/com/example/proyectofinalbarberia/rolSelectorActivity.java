@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 public class rolSelectorActivity extends AppCompatActivity {
-    private String rol = "cliente";
+    private String rol = "Cliente";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override

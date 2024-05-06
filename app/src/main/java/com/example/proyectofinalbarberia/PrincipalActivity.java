@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
@@ -62,7 +64,8 @@ public class PrincipalActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirestoreManager databaseManager;
     private List<Barberia> listaBarberias = new ArrayList<>();
-    private BarberiaAdapter adapter;
+    BarberiaAdapter adapter = new BarberiaAdapter(listaBarberias,this);
+    BarberiaDialogAdapter adapterDialogo = new BarberiaDialogAdapter(listaBarberias);
     private Uri imageUri;
     private ImageView imageViewBarbershop;
 
@@ -89,7 +92,7 @@ public class PrincipalActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new BarberiaAdapter(listaBarberias);
+        adapter = new BarberiaAdapter(listaBarberias, this);
         recyclerView.setAdapter(adapter);
 
         String uidUsuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -108,19 +111,21 @@ public class PrincipalActivity extends AppCompatActivity {
                     listaBarberias.clear();
 
                     for (String idBarberia : idsBarberias) {
-                        DocumentReference barberiaRef = FirebaseFirestore.getInstance().collection("Barberias").document(idBarberia);
+                        if (idBarberia != null) {
+                            DocumentReference barberiaRef = FirebaseFirestore.getInstance().collection("Barberias").document(idBarberia);
 
-                        barberiaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot barberiaSnapshot) {
-                                if (barberiaSnapshot.exists()) {
-                                    Barberia barberia = barberiaSnapshot.toObject(Barberia.class);
-                                    listaBarberias.add(barberia);
+                            barberiaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot barberiaSnapshot) {
+                                    if (barberiaSnapshot.exists()) {
+                                        Barberia barberia = barberiaSnapshot.toObject(Barberia.class);
+                                        listaBarberias.add(barberia);
 
-                                    adapter.notifyDataSetChanged();
+                                        adapter.notifyDataSetChanged();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             }
@@ -141,6 +146,7 @@ public class PrincipalActivity extends AppCompatActivity {
             databaseManager.obtenerRolUsuario(new FirestoreManager.RolUsuarioCallback() {
                 @Override
                 public void onRolUsuarioObtenido(String rolUsuario) {
+                    Log.d("TAG", "Rol del usuario: " + rolUsuario);
                     if(rolUsuario.equals("Barbero") || rolUsuario.equals("Cliente")){
                         mostrarDialogoBuscadorBarberias();
                     } else{
@@ -157,6 +163,11 @@ public class PrincipalActivity extends AppCompatActivity {
             return true;
         } else if (itemId == R.id.cerrarSesion) {
             cerrarSesion();
+            return true;
+        } else if (itemId == R.id.miperfil) {
+            Intent intent = new Intent(PrincipalActivity.this, PerfilActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -203,6 +214,7 @@ public class PrincipalActivity extends AppCompatActivity {
         Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void mostrarDialogoAgregarBarberia() {
@@ -211,6 +223,7 @@ public class PrincipalActivity extends AppCompatActivity {
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialogaddbarberia, null);
         builder.setView(dialogView);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         imageViewBarbershop = dialogView.findViewById(R.id.imageViewBarbershop);
 
@@ -258,11 +271,12 @@ public class PrincipalActivity extends AppCompatActivity {
 
     private void mostrarDialogoBuscadorBarberias() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Buscar Barberías");
+        builder.setTitle("BarberTeam");
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialogbuscarbarberia, null);
         builder.setView(dialogView);
 
+        SearchView searchViewBarberias = dialogView.findViewById(R.id.searchViewBarberias);
         RecyclerView recyclerViewBarberias = dialogView.findViewById(R.id.recyclerViewBarberias);
 
         CollectionReference barberiasCollection = FirebaseFirestore.getInstance().collection("Barberias");
@@ -275,10 +289,27 @@ public class PrincipalActivity extends AppCompatActivity {
                     listaBarberias.add(barberia);
                 }
 
-                BarberiaAdapter adapter = new BarberiaAdapter(listaBarberias);
-                recyclerViewBarberias.setAdapter(adapter);
+                recyclerViewBarberias.setAdapter(adapterDialogo);
                 recyclerViewBarberias.setLayoutManager(new LinearLayoutManager(this));
+
+                adapterDialogo.setBarberias(listaBarberias);
+
+                // SearchView
+                searchViewBarberias.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        // Filtrar las barberías en el adaptador del diálogo según el texto ingresado
+                        adapterDialogo.getFilter().filter(newText);
+                        return true;
+                    }
+                });
             } else {
+                Toast.makeText(PrincipalActivity.this, "Ha habido un error al obtener los datos.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -291,6 +322,17 @@ public class PrincipalActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+
+    private List<Barberia> filtrarBarberias(List<Barberia> listaCompleta, String query) {
+        List<Barberia> listaFiltrada = new ArrayList<>();
+        for (Barberia barberia : listaCompleta) {
+            if (barberia.getNombre().toLowerCase().contains(query.toLowerCase())) {
+                listaFiltrada.add(barberia);
+            }
+        }
+        return listaFiltrada;
     }
 
     private String obtenerUidActualUsuario() {

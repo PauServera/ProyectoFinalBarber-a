@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
 
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("TAG", "signInWithEmail:success");
                             Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
                             startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                             finish();
                             Toast.makeText(MainActivity.this, "¡Bienvenido de nuevo!", Toast.LENGTH_SHORT).show();
                         } else {
@@ -200,10 +202,12 @@ public class MainActivity extends AppCompatActivity {
                         Intent otroIntent = new Intent(MainActivity.this, PrincipalActivity.class);
                         startActivity(otroIntent);
                         finish();
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     } else {
                         Intent intentRegistro = new Intent(MainActivity.this, rolSelectorActivity.class);
                         startActivity(intentRegistro);
                         finish();
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     }
                 } else {
                     Toast.makeText(MainActivity.this, "Error al verificar UID en Firestore", Toast.LENGTH_SHORT).show();
