@@ -1,11 +1,14 @@
 package com.example.proyectofinalbarberia;
 
 import android.content.Context;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -13,8 +16,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.util.List;
@@ -214,6 +219,8 @@ public class FirestoreManager {
                 });
     }
 
+
+
     public interface OnEliminarBarberiaListener {
         void onBarberiaEliminada();
         void onEliminarBarberiaError(String mensajeError);
@@ -223,4 +230,5 @@ public class FirestoreManager {
         void onBarberiaModificada();
         void onModificarBarberiaError(String mensajeError);
     }
+
 }

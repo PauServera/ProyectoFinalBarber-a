@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "¡Bienvenido de nuevo!", Toast.LENGTH_SHORT).show();
                         } else {
                             Log.w("TAG", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Inicio de sesión fallido", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "El correo o la contraseña que ha introducido es incorrect@.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

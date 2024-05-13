@@ -1,27 +1,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@color/white">
-    
+    android:background="@color/black">
+
+    <!-- Imagen de perfil circular -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/toolbar_color"
         android:theme="?attr/actionBarTheme" />
 
-    <!-- Imagen de perfil circular -->
+
     <ImageView
         android:id="@+id/imageViewProfile"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/perfil"
+        android:background="@drawable/circle_background"
         android:scaleType="centerCrop"
-        android:background="@drawable/circle_background" />
+        android:src="@drawable/perfil" />
 
     <!-- Nombre del usuario -->
     <TextView
@@ -32,8 +34,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="Nombre de Usuario"
+        android:textColor="@color/white"
         android:textSize="20sp"
-        android:textColor="@color/black"
         android:textStyle="bold" />
 
     <!-- Información de contacto -->
@@ -44,20 +46,35 @@
         android:layout_below="@id/textViewName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
-        android:text="Correo electrónico: ejemplo@example.com\nTeléfono: +123456789"
-        android:textSize="16sp"
-        android:textColor="@color/dark_gray" />
+        android:text="Correo electrónico: ejemplo@example.com\"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewContactInfo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:text="Teléfono: +123456789"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
     <!-- Separador -->
+
+    <!-- Botón de editar perfil -->
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/textViewContactInfo"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="49dp"
         android:background="@color/light_gray" />
 
-    <!-- Botón de editar perfil -->
     <Button
         android:id="@+id/buttonEditProfile"
         android:layout_width="wrap_content"
@@ -65,8 +82,8 @@
         android:layout_below="@id/divider"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
+        android:backgroundTint="#AC0202"
         android:text="Editar Perfil"
-        android:textColor="@color/white"
-        android:background="@drawable/rounded_button_background" />
+        android:textColor="@color/white" />
 
 </RelativeLayout>

@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/btnCambiarNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cambiar nombre"
+        android:backgroundTint="#AC0202"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnCambiarCorreo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cambiar correo electrónico"
+        android:backgroundTint="#AC0202"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnCambiarImagen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cambiar imagen de perfil"
+        android:backgroundTint="#AC0202"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnCambiarTelefono"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cambiar teléfono"
+        android:backgroundTint="#AC0202"
+        android:textColor="#FFFFFF"/>
+
+</LinearLayout>
