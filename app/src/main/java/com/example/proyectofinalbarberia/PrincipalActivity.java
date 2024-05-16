@@ -135,18 +135,55 @@ public class PrincipalActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem agregarBarberiaItem = menu.findItem(R.id.agregarbarberia);
+        MenuItem agregarBarberoItem = menu.findItem(R.id.agregarBarbero);
+        MenuItem establecerHorarioItem = menu.findItem(R.id.modificarHorario);
+
+        // Obtener el rol del usuario y ajustar la visibilidad de los elementos del menú
+        databaseManager.obtenerRolUsuario(new FirestoreManager.RolUsuarioCallback() {
+            @Override
+            public void onRolUsuarioObtenido(String rolUsuario) {
+                if (rolUsuario.equals("Dueño")) {
+                    establecerHorarioItem.setVisible(true);
+                    agregarBarberoItem.setVisible(true);
+                    agregarBarberiaItem.setVisible(true);
+                } else if (rolUsuario.equals("Barbero")){
+                    establecerHorarioItem.setVisible(true);
+                    agregarBarberoItem.setVisible(false);
+                    agregarBarberiaItem.setVisible(true);
+                }
+                    else{
+                        establecerHorarioItem.setVisible(false);
+                        agregarBarberoItem.setVisible(false);
+                    }
+
+                    if (rolUsuario.equals("Cliente")) {
+                        agregarBarberiaItem.setVisible(true);
+                    } else {
+                        agregarBarberiaItem.setVisible(false);
+                    }
+                }
+
+
+            @Override
+            public void onFalloObteniendoRolUsuario(String mensajeError) {
+                Toast.makeText(PrincipalActivity.this, "Ha ocurrido un error, inténtalo de nuevo.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return true;
     }
 
+
+
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
         if (itemId == R.id.agregarbarberia) {
             databaseManager.obtenerRolUsuario(new FirestoreManager.RolUsuarioCallback() {
                 @Override
                 public void onRolUsuarioObtenido(String rolUsuario) {
-                    Log.d("TAG", "Rol del usuario: " + rolUsuario);
                     if(rolUsuario.equals("Barbero") || rolUsuario.equals("Cliente")){
                         mostrarDialogoBuscadorBarberias();
                     } else{
@@ -157,7 +194,6 @@ public class PrincipalActivity extends AppCompatActivity {
                 @Override
                 public void onFalloObteniendoRolUsuario(String mensajeError) {
                     Toast.makeText(PrincipalActivity.this, "Ha ocurrido un error, inténtalo de nuevo.", Toast.LENGTH_SHORT).show();
-
                 }
             });
             return true;
@@ -169,10 +205,26 @@ public class PrincipalActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             return true;
+        } else if (itemId == R.id.misCitas) {
+            Intent intent = new Intent(PrincipalActivity.this, MisCitasActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            return true;
+        } else if (itemId == R.id.modificarHorario) {
+            Intent intent = new Intent(PrincipalActivity.this, DefinirHorarioActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            return true;
+        } else if (itemId == R.id.agregarBarbero) {
+            Intent intent = new Intent(PrincipalActivity.this, AgregarBarberoActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
+
 
     private void cambiarColorBarraDeEstado() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

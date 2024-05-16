@@ -13,6 +13,15 @@
         android:theme="@style/Theme.ProyectoFinalBarberia"
         tools:targetApi="31">
         <activity
+            android:name=".AgregarBarberoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DefinirHorarioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MisCitasActivity"
+            android:exported="false" />
+        <activity
             android:name=".PerfilActivity"
             android:exported="false" />
         <activity

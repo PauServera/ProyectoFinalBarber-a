@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.List;
 
@@ -231,4 +232,73 @@ public class FirestoreManager {
         void onModificarBarberiaError(String mensajeError);
     }
 
+    public void obtenerUidUsuarioPorCorreo(String correoElectronico, UidUsuarioCallback callback) {
+        firestoreInstance.collection("Usuarios")
+                .whereEqualTo("email", correoElectronico)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String uidUsuario = document.getId();
+                            callback.onUidUsuarioObtenido(uidUsuario);
+                            return;
+                        }
+                        callback.onUidUsuarioObtenido(null);
+                    } else {
+                        callback.onFalloObteniendoUidUsuario("Error al obtener el UID del usuario");
+                    }
+                });
+    }
+
+    public interface UidUsuarioCallback {
+        void onUidUsuarioObtenido(String uidUsuario);
+
+        void onFalloObteniendoUidUsuario(String mensajeError);
+    }
+
+    public void agregarBarberiaAUsuario(String uidUsuario, String uidBarberia, AgregarBarberiaCallback callback) {
+        DocumentReference usuarioRef = firestoreInstance.collection("Usuarios").document(uidUsuario);
+
+        usuarioRef.update("barberias", FieldValue.arrayUnion(uidBarberia))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        callback.onBarberiaAgregada();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onFalloAgregandoBarberia(e.getMessage());
+                    }
+                });
+    }
+
+    public void agregarBarberoABarberia(String uidBarberia, String uidBarbero, AgregarBarberoCallback callback) {
+        DocumentReference barberiaRef = firestoreInstance.collection("Barberias").document(uidBarberia);
+
+        barberiaRef.update("barberos", FieldValue.arrayUnion(uidBarbero))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        callback.onBarberoAgregado();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onFalloAgregandoBarbero(e.getMessage());
+                    }
+                });
+    }
+
+    public interface AgregarBarberiaCallback {
+        void onBarberiaAgregada();
+        void onFalloAgregandoBarberia(String mensajeError);
+    }
+
+    public interface AgregarBarberoCallback {
+        void onBarberoAgregado();
+        void onFalloAgregandoBarbero(String mensajeError);
+    }
 }

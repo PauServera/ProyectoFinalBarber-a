@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Spinner
+        android:id="@+id/spinnerDia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/dias_semana"/>
+
+    <TimePicker
+        android:id="@+id/timePickerInicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#AC0202"
+        android:timePickerMode="spinner" />
+
+    <TimePicker
+        android:id="@+id/timePickerFin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#AC0202"
+        android:timePickerMode="spinner" />
+
+    <Button
+        android:id="@+id/btnGuardarHorario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#AC0202"
+        android:text="Guardar Horario"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

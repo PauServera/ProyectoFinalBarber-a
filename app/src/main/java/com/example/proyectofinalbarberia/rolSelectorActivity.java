@@ -31,6 +31,8 @@ public class rolSelectorActivity extends AppCompatActivity {
     private String rol = "Cliente";
     private String urlImagenPerfil = "";
     private String telefono = "";
+    private ArrayList<Cita> listaCitas = new ArrayList<>();
+    private Map horarioPersonal = new HashMap<>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -62,6 +64,8 @@ public class rolSelectorActivity extends AppCompatActivity {
                 usuario.put("telefono", telefono);
                 usuario.put("disponibilidad", disponibilidad);
                 usuario.put("urlImagenPerfil", urlImagenPerfil);
+                usuario.put("listaCitas", listaCitas);
+                usuario.put("horarioPersonal", horarioPersonal);
 
 
 
@@ -97,6 +101,8 @@ public class rolSelectorActivity extends AppCompatActivity {
                 usuario.put("telefono", telefono);
                 usuario.put("disponibilidad", disponibilidad);
                 usuario.put("urlImagenPerfil", urlImagenPerfil);
+                usuario.put("listaCitas", listaCitas);
+                usuario.put("horarioPersonal", horarioPersonal);
 
 
 
@@ -128,6 +134,7 @@ public class rolSelectorActivity extends AppCompatActivity {
                 usuario.put("rol", rol);
                 usuario.put("telefono", telefono);
                 usuario.put("urlImagenPerfil", urlImagenPerfil);
+                usuario.put("listaCitas", listaCitas);
 
 
 

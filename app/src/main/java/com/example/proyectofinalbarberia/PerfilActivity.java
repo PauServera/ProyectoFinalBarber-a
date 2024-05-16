@@ -102,7 +102,6 @@ public class PerfilActivity extends AppCompatActivity {
         botoneditarPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Llamar a la función mostrarDialogoEditarPerfil() cuando se hace clic en el botón
                 mostrarDialogoEditarPerfil();
             }
         });

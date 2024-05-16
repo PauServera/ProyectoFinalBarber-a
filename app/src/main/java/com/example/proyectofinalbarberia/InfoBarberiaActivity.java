@@ -3,9 +3,11 @@ package com.example.proyectofinalbarberia;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -80,9 +82,25 @@ public class InfoBarberiaActivity extends AppCompatActivity {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                // Aquí puedes manejar la selección de la fecha
-                // Por ejemplo, podrías mostrar un diálogo para que el usuario seleccione un horario para la cita
-                // O podrías realizar cualquier otra acción que desees en función de la fecha seleccionada
+                String dateMessage = String.format("¿Te gustaría escoger cita para el %d/%d/%d?", dayOfMonth, month + 1, year);
+
+                // Mostrar el diálogo
+                new AlertDialog.Builder(InfoBarberiaActivity.this)
+                        .setTitle("Seleccionar cita")
+                        .setMessage(dateMessage)
+                        .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(InfoBarberiaActivity.this, "Cita seleccionada", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
             }
         });
 
