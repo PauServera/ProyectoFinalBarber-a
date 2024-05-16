@@ -120,7 +120,7 @@ public class BarberiaAdapter extends RecyclerView.Adapter<BarberiaAdapter.Barber
         });
 
         // Eliminar
-        if (rolUsuarioActual != null && (rolUsuarioActual.equals("Usuario") || rolUsuarioActual.equals("Barbero"))) {
+        if (rolUsuarioActual != null && (rolUsuarioActual.equals("Cliente") || rolUsuarioActual.equals("Barbero"))) {
             holder.btnBorrar.setVisibility(View.VISIBLE);
             holder.btnEditar.setVisibility(View.INVISIBLE);
         } else {

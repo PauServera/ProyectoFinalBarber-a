@@ -47,15 +47,18 @@ import androidx.appcompat.widget.Toolbar;
 public class InfoBarberiaActivity extends AppCompatActivity {
 
     private ImageView imageViewBarberia;
-    private TextView textViewNombre, textViewTelefono, textViewUbicacion;
+    private TextView textViewNombre, textViewTelefono, textViewUbicacion, textViewTitle;
     private Toolbar toolbarDetalleBarberia;
     private CalendarView calendarView;
+    private FirestoreManager firestoreManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_barberia);
         cambiarColorBarraDeEstado();
+
+        firestoreManager = new FirestoreManager();
 
         Intent intent = getIntent();
         Barberia barberia = intent.getParcelableExtra("BARBERIA_INFO");
@@ -64,6 +67,7 @@ public class InfoBarberiaActivity extends AppCompatActivity {
         textViewNombre = findViewById(R.id.textViewNombre);
         textViewTelefono = findViewById(R.id.textViewTelefono);
         textViewUbicacion = findViewById(R.id.textViewUbicacion);
+        textViewTitle = findViewById(R.id.title);
         toolbarDetalleBarberia = findViewById(R.id.toolbar);
         calendarView = findViewById(R.id.calendarView);
 
@@ -101,6 +105,21 @@ public class InfoBarberiaActivity extends AppCompatActivity {
                             }
                         })
                         .show();
+            }
+        });
+
+        // Ocultar el título para los usuarios con el rol "Dueño"
+        firestoreManager.obtenerRolUsuario(new FirestoreManager.RolUsuarioCallback() {
+            @Override
+            public void onRolUsuarioObtenido(String rolUsuario) {
+                if (rolUsuario != null && rolUsuario.equals("Dueño") || rolUsuario.equals("Barbero")) {
+                    textViewTitle.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFalloObteniendoRolUsuario(String mensajeError) {
+                Toast.makeText(InfoBarberiaActivity.this, "Error al obtener el rol del usuario: " + mensajeError, Toast.LENGTH_SHORT).show();
             }
         });
 
