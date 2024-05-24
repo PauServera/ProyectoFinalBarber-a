@@ -65,8 +65,7 @@ public class AgregarBarberoActivity extends AppCompatActivity {
 
                     @Override
                     public void onFalloObteniendoUidBarberia(String mensajeError) {
-                        // Manejar el caso en que ocurra un error al obtener el UID de la barbería
-                        // Puedes mostrar un mensaje de error o realizar otras acciones de manejo de errores
+                        // error al obtener el UID de la barbería
                     }
                 });
 

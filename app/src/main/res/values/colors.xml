@@ -6,4 +6,6 @@
     <color name="primary_color">#3F51B5</color>
     <color name="light_gray">#CCCCCC</color>
     <color name="dark_gray">#666666</color>
+    <color name="default_item_color">#FFFFFF</color>
+    <color name="selected_item_color">#FFDD55</color>
 </resources>

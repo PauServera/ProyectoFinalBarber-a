@@ -14,17 +14,22 @@ public class Barberia implements Parcelable {
     private String ubicacion;
     private String telefono;
     private String imageUrl;
-    private ArrayList<Barbero> barberos;
+    private List<String> listaBarberos;
+    private List<Cita> listaCitas;
 
     public Barberia() {
+        this.listaBarberos = new ArrayList<>();
+        this.listaCitas = new ArrayList<>();
     }
 
-    public Barberia(String id, String nombre, String ubicacion, String telefono, String imageUrl) {
+    public Barberia(String id, String nombre, String ubicacion, String telefono, String imageUrl, List<String> listaBarberos, List<Cita> listaCitas ) {
         this.id = id;
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.telefono = telefono;
         this.imageUrl = imageUrl;
+        this.listaBarberos = listaBarberos != null ? listaBarberos : new ArrayList<>();
+        this.listaCitas = listaCitas != null ? listaCitas : new ArrayList<>();
     }
 
     protected Barberia(Parcel in) {
@@ -67,6 +72,22 @@ public class Barberia implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<String> getListaBarberos() {
+        return listaBarberos;
+    }
+
+    public void setListaBarberos(List<String> listaBarberos) {
+        this.listaBarberos = listaBarberos;
+    }
+
+    public List<Cita> getListaCitas() {
+        return listaCitas;
+    }
+
+    public void setListaCitas(List<Cita> listaCitas) {
+        this.listaCitas = listaCitas;
     }
 
     public String getNombre() {

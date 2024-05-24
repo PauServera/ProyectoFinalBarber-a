@@ -277,7 +277,7 @@ public class FirestoreManager {
     public void agregarBarberoABarberia(String uidBarberia, String uidBarbero, AgregarBarberoCallback callback) {
         DocumentReference barberiaRef = firestoreInstance.collection("Barberias").document(uidBarberia);
 
-        barberiaRef.update("barberos", FieldValue.arrayUnion(uidBarbero))
+        barberiaRef.update("listaBarberos", FieldValue.arrayUnion(uidBarbero))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

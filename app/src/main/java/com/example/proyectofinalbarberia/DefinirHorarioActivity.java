@@ -31,13 +31,16 @@ public class DefinirHorarioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_definir_horario);
 
+        // Inicializar Firestore
         db = FirebaseFirestore.getInstance();
 
+        // Referenciar los elementos del diseño
         timePickerInicio = findViewById(R.id.timePickerInicio);
         timePickerFin = findViewById(R.id.timePickerFin);
         btnGuardarHorario = findViewById(R.id.btnGuardarHorario);
         spinnerDia = findViewById(R.id.spinnerDia);
 
+        // Configurar botón de guardar horario
         btnGuardarHorario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,23 +50,32 @@ public class DefinirHorarioActivity extends AppCompatActivity {
     }
 
     private void guardarHorario() {
+        // Obtener el UID del usuario actual
         String userId = firestoreManager.obtenerUidActualUsuario();
-        Log.e("UserID:", userId);
+        if (userId == null) {
+            Toast.makeText(DefinirHorarioActivity.this, "Error al obtener el UID del usuario", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        // Obtener el día seleccionado y los horarios
         String dia = spinnerDia.getSelectedItem().toString();
         int horaInicio = timePickerInicio.getHour();
         int minutoInicio = timePickerInicio.getMinute();
         int horaFin = timePickerFin.getHour();
         int minutoFin = timePickerFin.getMinute();
 
+        // Formatear las horas en cadenas HH:mm
         String inicio = String.format("%02d:%02d", horaInicio, minutoInicio);
         String fin = String.format("%02d:%02d", horaFin, minutoFin);
 
+        // Validar que la hora de fin sea posterior a la hora de inicio
         if (validarHorario(horaInicio, minutoInicio, horaFin, minutoFin)) {
+            // Crear el mapa de horarios
             Map<String, Object> horario = new HashMap<>();
             horario.put("inicio", inicio);
             horario.put("fin", fin);
 
+            // Actualizar el horario en Firestore
             db.collection("Usuarios").document(userId)
                     .update("horarioPersonal." + dia, horario)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -84,11 +96,6 @@ public class DefinirHorarioActivity extends AppCompatActivity {
     }
 
     private boolean validarHorario(int horaInicio, int minutoInicio, int horaFin, int minutoFin) {
-        if (horaFin < horaInicio || (horaFin == horaInicio && minutoFin <= minutoInicio)) {
-            return false;
-        }
-        return true;
+        return !(horaFin < horaInicio || (horaFin == horaInicio && minutoFin <= minutoInicio));
     }
 }
-
-

@@ -4,49 +4,55 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Cita {
-    private int idCita;
-    private Cliente idCliente;
-    private Barbero idBarbero;
-    private LocalDateTime fechaCita;
-    private String infoCita;
+    private String id;
+    private String idCliente;
+    private String idBarberia;
+    private String idBarbero;
+    private Date fechaCita;
 
-    public int getIdCita() {
-        return idCita;
+    public Cita() {
+        // Constructor vacío necesario para Firestore
     }
 
-    public void setIdCita(int idCita) {
-        this.idCita = idCita;
+    // Getters y setters
+
+    public String getId() {
+        return id;
     }
 
-    public Cliente getIdCliente() {
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(Cliente idCliente) {
+    public void setIdCliente(String idCliente) {
         this.idCliente = idCliente;
     }
 
-    public Barbero getIdBarbero() {
+    public String getIdBarberia() {
+        return idBarberia;
+    }
+
+    public void setIdBarberia(String idBarberia) {
+        this.idBarberia = idBarberia;
+    }
+
+    public String getIdBarbero() {
         return idBarbero;
     }
 
-    public void setIdBarbero(Barbero idBarbero) {
+    public void setIdBarbero(String idBarbero) {
         this.idBarbero = idBarbero;
     }
 
-    public LocalDateTime getFechaCita() {
+    public Date getFechaCita() {
         return fechaCita;
     }
 
-    public void setFechaCita(LocalDateTime fechaCita) {
+    public void setFechaCita(Date fechaCita) {
         this.fechaCita = fechaCita;
-    }
-
-    public String getInfoCita() {
-        return infoCita;
-    }
-
-    public void setInfoCita(String infoCita) {
-        this.infoCita = infoCita;
     }
 }

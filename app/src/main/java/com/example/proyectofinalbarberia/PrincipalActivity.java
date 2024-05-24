@@ -147,23 +147,16 @@ public class PrincipalActivity extends AppCompatActivity {
                     establecerHorarioItem.setVisible(true);
                     agregarBarberoItem.setVisible(true);
                     agregarBarberiaItem.setVisible(true);
-                } else if (rolUsuario.equals("Barbero")){
+                } else if (rolUsuario.equals("Barbero")) {
                     establecerHorarioItem.setVisible(true);
                     agregarBarberoItem.setVisible(false);
                     agregarBarberiaItem.setVisible(true);
+                } else if (rolUsuario.equals("Cliente")) {
+                    agregarBarberiaItem.setVisible(true);
+                    agregarBarberoItem.setVisible(false);
+                    establecerHorarioItem.setVisible(false);
                 }
-                    else{
-                        establecerHorarioItem.setVisible(false);
-                        agregarBarberoItem.setVisible(false);
-                    }
-
-                    if (rolUsuario.equals("Cliente")) {
-                        agregarBarberiaItem.setVisible(true);
-                    } else {
-                        agregarBarberiaItem.setVisible(false);
-                    }
-                }
-
+            }
 
             @Override
             public void onFalloObteniendoRolUsuario(String mensajeError) {
@@ -174,8 +167,6 @@ public class PrincipalActivity extends AppCompatActivity {
         return true;
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
@@ -184,9 +175,9 @@ public class PrincipalActivity extends AppCompatActivity {
             databaseManager.obtenerRolUsuario(new FirestoreManager.RolUsuarioCallback() {
                 @Override
                 public void onRolUsuarioObtenido(String rolUsuario) {
-                    if(rolUsuario.equals("Barbero") || rolUsuario.equals("Cliente")){
+                    if (rolUsuario.equals("Barbero") || rolUsuario.equals("Cliente")) {
                         mostrarDialogoBuscadorBarberias();
-                    } else{
+                    } else {
                         mostrarDialogoAgregarBarberia();
                     }
                 }
@@ -224,7 +215,6 @@ public class PrincipalActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-
 
     private void cambiarColorBarraDeEstado() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -279,22 +269,7 @@ public class PrincipalActivity extends AppCompatActivity {
 
         imageViewBarbershop = dialogView.findViewById(R.id.imageViewBarbershop);
 
-        builder.setPositiveButton("Agregar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EditText editTextBarbershopName = dialogView.findViewById(R.id.editTextBarbershopName);
-                EditText editTextBarbershopLocation = dialogView.findViewById(R.id.editTextBarbershopLocation);
-                EditText editTextBarbershopPhoneNumber = dialogView.findViewById(R.id.editTextBarbershopPhoneNumber);
-
-                String nombreBarberia = editTextBarbershopName.getText().toString();
-                String ubicacionBarberia = editTextBarbershopLocation.getText().toString();
-                String telefonoBarberia = editTextBarbershopPhoneNumber.getText().toString();
-
-                if (imageUri != null) {
-                    subirImagenAFirebaseStorage(imageUri, nombreBarberia, ubicacionBarberia, telefonoBarberia);
-                }
-            }
-        });
+        builder.setPositiveButton("Agregar", null);
 
         builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
@@ -307,12 +282,56 @@ public class PrincipalActivity extends AppCompatActivity {
 
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onShow(DialogInterface dialog) {
+            public void onShow(DialogInterface dialogInterface) {
                 Button btnSelectImage = dialogView.findViewById(R.id.btnSelectImage);
                 btnSelectImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         seleccionarImagen();
+                    }
+                });
+
+                Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText editTextBarbershopName = dialogView.findViewById(R.id.editTextBarbershopName);
+                        EditText editTextBarbershopLocation = dialogView.findViewById(R.id.editTextBarbershopLocation);
+                        EditText editTextBarbershopPhoneNumber = dialogView.findViewById(R.id.editTextBarbershopPhoneNumber);
+
+                        String nombreBarberia = editTextBarbershopName.getText().toString().trim();
+                        String ubicacionBarberia = editTextBarbershopLocation.getText().toString().trim();
+                        String telefonoBarberia = editTextBarbershopPhoneNumber.getText().toString().trim();
+
+                        if (nombreBarberia.isEmpty()) {
+                            editTextBarbershopName.setError("El nombre es obligatorio");
+                            editTextBarbershopName.requestFocus();
+                            return;
+                        }
+
+                        if (ubicacionBarberia.isEmpty()) {
+                            editTextBarbershopLocation.setError("La ubicación es obligatoria");
+                            editTextBarbershopLocation.requestFocus();
+                            return;
+                        }
+
+                        if (telefonoBarberia.isEmpty()) {
+                            editTextBarbershopPhoneNumber.setError("El teléfono es obligatorio");
+                            editTextBarbershopPhoneNumber.requestFocus();
+                            return;
+                        }
+
+                        if (!telefonoBarberia.matches("\\d{9}")) {
+                            editTextBarbershopPhoneNumber.setError("El teléfono debe tener 9 dígitos");
+                            editTextBarbershopPhoneNumber.requestFocus();
+                            return;
+                        }
+
+                        if (imageUri != null) {
+                            subirImagenAFirebaseStorage(imageUri, nombreBarberia, ubicacionBarberia, telefonoBarberia);
+                        } else {
+                            Toast.makeText(PrincipalActivity.this, "Selecciona una imagen para la barbería", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
@@ -365,7 +384,7 @@ public class PrincipalActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -375,7 +394,6 @@ public class PrincipalActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
 
     private List<Barberia> filtrarBarberias(List<Barberia> listaCompleta, String query) {
         List<Barberia> listaFiltrada = new ArrayList<>();
@@ -425,29 +443,51 @@ public class PrincipalActivity extends AppCompatActivity {
     }
 
     private void agregarBarberiaFirestore(String nombreBarberia, String ubicacionBarberia, String telefonoBarberia, String imageUrl) {
-        String uidUsuario = obtenerUidActualUsuario();
+        String uidUsuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if (uidUsuario != null) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            DocumentReference barberiaRef = db.collection("Barberias").document();
-            String uidBarberia = barberiaRef.getId();
+            DocumentReference usuarioRef = db.collection("Usuarios").document(uidUsuario);
 
-            Barberia nuevaBarberia = new Barberia(uidBarberia, nombreBarberia, ubicacionBarberia, telefonoBarberia, imageUrl);
+            usuarioRef.get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    List<String> barberias = (List<String>) documentSnapshot.get("barberias");
+                    if (barberias != null && !barberias.isEmpty()) {
+                        Toast.makeText(PrincipalActivity.this, "Imposible, ya tienes una barbería registrada.", Toast.LENGTH_LONG).show();
+                    } else {
+                        DocumentReference barberiaRef = db.collection("Barberias").document();
+                        String uidBarberia = barberiaRef.getId();
 
-            barberiaRef.set(nuevaBarberia)
-                    .addOnSuccessListener(aVoid -> {
-                        DocumentReference usuarioRef = db.collection("Usuarios").document(uidUsuario);
-                        usuarioRef.update("barberias", FieldValue.arrayUnion(uidBarberia))
-                                .addOnSuccessListener(aVoid1 -> {
-                                    Toast.makeText(PrincipalActivity.this, "Éxito al añadir la barbería.", Toast.LENGTH_SHORT).show();
+                        List<Cita> listaCitas = new ArrayList<>();
+                        List<String> listaBarberos = new ArrayList<>();
+                        listaBarberos.add(uidUsuario); // Agregar el UID del dueño a la lista de barberos
+
+                        Barberia nuevaBarberia = new Barberia(uidBarberia, nombreBarberia, ubicacionBarberia, telefonoBarberia, imageUrl, listaBarberos, listaCitas);
+
+                        Log.d("FirestoreDebug", "Barberia: " + nuevaBarberia.getNombre());
+                        Log.d("FirestoreDebug", "ListaBarberos: " + nuevaBarberia.getListaBarberos().toString());
+                        Log.d("FirestoreDebug", "ListaCitas: " + nuevaBarberia.getListaCitas().toString());
+
+                        barberiaRef.set(nuevaBarberia)
+                                .addOnSuccessListener(aVoid -> {
+                                    usuarioRef.update("barberias", FieldValue.arrayUnion(uidBarberia))
+                                            .addOnSuccessListener(aVoid1 -> {
+                                                Toast.makeText(PrincipalActivity.this, "Éxito al añadir la barbería.", Toast.LENGTH_SHORT).show();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(PrincipalActivity.this, "Error al actualizar la información del usuario", Toast.LENGTH_SHORT).show();
+                                            });
                                 })
                                 .addOnFailureListener(e -> {
-                                    Toast.makeText(PrincipalActivity.this, "Error al actualizar la información del usuario", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PrincipalActivity.this, "Error al agregar la barbería a Firestore", Toast.LENGTH_SHORT).show();
                                 });
-                    })
-                    .addOnFailureListener(e -> {
-                        // error al agregar la barbería a Firestore
-                    });
+                    }
+                } else {
+                    Toast.makeText(PrincipalActivity.this, "Error al obtener la información del usuario", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(e -> {
+                Toast.makeText(PrincipalActivity.this, "Error al consultar la información del usuario", Toast.LENGTH_SHORT).show();
+            });
         }
     }
 }

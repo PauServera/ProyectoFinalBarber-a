@@ -51,6 +51,7 @@ public class InfoBarberiaActivity extends AppCompatActivity {
     private Toolbar toolbarDetalleBarberia;
     private CalendarView calendarView;
     private FirestoreManager firestoreManager;
+    private String uidBarberia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class InfoBarberiaActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Barberia barberia = intent.getParcelableExtra("BARBERIA_INFO");
+        uidBarberia = barberia != null ? barberia.getId() : null;
 
         imageViewBarberia = findViewById(R.id.imageViewBarberia);
         textViewNombre = findViewById(R.id.textViewNombre);
@@ -71,7 +73,6 @@ public class InfoBarberiaActivity extends AppCompatActivity {
         toolbarDetalleBarberia = findViewById(R.id.toolbar);
         calendarView = findViewById(R.id.calendarView);
 
-        // Configurar Toolbar
         setSupportActionBar(toolbarDetalleBarberia);
         int toolbarColor = getResources().getColor(R.color.toolbar_color);
         getSupportActionBar().setTitle("");
@@ -82,33 +83,13 @@ public class InfoBarberiaActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        // Calendario citas
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                String dateMessage = String.format("¿Te gustaría escoger cita para el %d/%d/%d?", dayOfMonth, month + 1, year);
-
-                // Mostrar el diálogo
-                new AlertDialog.Builder(InfoBarberiaActivity.this)
-                        .setTitle("Seleccionar cita")
-                        .setMessage(dateMessage)
-                        .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(InfoBarberiaActivity.this, "Cita seleccionada", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .show();
+                onDaySelected(year, month, dayOfMonth);
             }
         });
 
-        // Ocultar el título para los usuarios con el rol "Dueño"
         firestoreManager.obtenerRolUsuario(new FirestoreManager.RolUsuarioCallback() {
             @Override
             public void onRolUsuarioObtenido(String rolUsuario) {
@@ -129,6 +110,13 @@ public class InfoBarberiaActivity extends AppCompatActivity {
             textViewTelefono.setText(barberia.getTelefono());
             textViewUbicacion.setText(barberia.getUbicacion());
         }
+    }
+
+    private void onDaySelected(int year, int month, int dayOfMonth) {
+        Intent intent = new Intent(InfoBarberiaActivity.this, SeleccionarBarberoActivity.class);
+        intent.putExtra("UID_BARBERIA", uidBarberia);
+        intent.putExtra("SELECTED_DATE", String.format("%d/%d/%d", dayOfMonth, month + 1, year));
+        startActivity(intent);
     }
 
     @Override
