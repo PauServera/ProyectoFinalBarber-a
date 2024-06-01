@@ -26,12 +26,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageViewLogo"
         android:layout_marginTop="16dp"
-        android:backgroundTint="#040404"
+        android:backgroundTint="#FFFFFF"
         android:hint="Correo electrónico"
         android:inputType="textEmailAddress"
-        android:textColor="#040404"
-        android:textColorHighlight="#040404"
-        android:textColorHint="#040404" />
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textColorLink="#FFFFFF" />
 
     <EditText
         android:id="@+id/editTextPassword"
@@ -39,11 +40,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextEmail"
         android:layout_marginTop="8dp"
-        android:backgroundTint="#040404"
+        android:backgroundTint="#FFFFFF"
         android:hint="Contraseña"
         android:inputType="textPassword"
-        android:textColorHighlight="#040404"
-        android:textColorHint="#040404" />
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textColorLink="#FFFDFD" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnLogin"
@@ -51,7 +53,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextPassword"
         android:layout_marginTop="16dp"
-        android:text="Iniciar sesión"/>
+        android:backgroundTint="#FFFFFF"
+        android:text="Iniciar sesión"
+        android:textColor="#000000"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#000000"
+        android:textColorLink="#000000" />
 
     <TextView
         android:id="@+id/textViewRegister"

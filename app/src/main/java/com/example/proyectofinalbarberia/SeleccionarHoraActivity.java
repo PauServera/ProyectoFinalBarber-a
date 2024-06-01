@@ -1,10 +1,14 @@
 package com.example.proyectofinalbarberia;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowInsetsController;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +41,7 @@ public class SeleccionarHoraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seleccionar_hora);
+        cambiarColorBarraDeEstado();
 
         firestoreManager = new FirestoreManager();
 
@@ -68,11 +73,6 @@ public class SeleccionarHoraActivity extends AppCompatActivity {
                                 String inicio = horarioDelDia.get("inicio");
                                 String fin = horarioDelDia.get("fin");
                                 List<String> horasDisponibles = generarListaHoras(inicio, fin);
-
-                                Log.d(TAG, "Horas disponibles generadas: " + horasDisponibles);
-
-                                // Log de los parámetros de la consulta
-                                Log.d(TAG, "Consultando citas para idBarberia: " + uidBarberia + " y fecha: " + selectedDate);
 
                                 db.collection("Citas")
                                         .whereEqualTo("idBarberia", uidBarberia)
@@ -141,7 +141,7 @@ public class SeleccionarHoraActivity extends AppCompatActivity {
 
             while (cal.getTime().before(dateFin)) {
                 horas.add(format.format(cal.getTime()));
-                cal.add(Calendar.MINUTE, 30); // Assuming 30 minutes intervals, adjust if needed
+                cal.add(Calendar.MINUTE, 30);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -161,10 +161,13 @@ public class SeleccionarHoraActivity extends AppCompatActivity {
                 cita.put("idCliente", firestoreManager.obtenerUidActualUsuario());
                 cita.put("fecha", selectedDate);
                 cita.put("hora", horaSeleccionada);
+                cita.put("idBarbero", uidBarbero); // Asegúrate de que el idBarbero se guarda
 
-                db.collection("Citas")
-                        .add(cita)
+                db.collection("Citas").add(cita)
                         .addOnSuccessListener(documentReference -> {
+                            String uidCita = documentReference.getId();
+                            firestoreManager.agregarCitaAUsuario(firestoreManager.obtenerUidActualUsuario(), uidCita);
+                            firestoreManager.agregarCitaAUsuario(uidBarbero, uidCita);
                             Toast.makeText(SeleccionarHoraActivity.this, "Cita creada con éxito", Toast.LENGTH_SHORT).show();
                             finish();
                         })
@@ -175,6 +178,32 @@ public class SeleccionarHoraActivity extends AppCompatActivity {
             }
         } else {
             Toast.makeText(this, "Por favor seleccione una hora", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void cambiarColorBarraDeEstado() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            cambiarColorBarraDeEstadoAndroidR();
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cambiarColorBarraDeEstadoLollipop();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void cambiarColorBarraDeEstadoLollipop() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.toolbar_color));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void cambiarColorBarraDeEstadoAndroidR() {
+        WindowInsetsController insetsController = getWindow().getInsetsController();
+        if (insetsController != null) {
+            insetsController.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.toolbar_color));
         }
     }
 }

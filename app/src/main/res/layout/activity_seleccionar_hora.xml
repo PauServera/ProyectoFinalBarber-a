@@ -14,5 +14,9 @@
         android:id="@+id/btnConfirmarCita"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Confirmar Cita"/>
+        android:backgroundTint="#AC0202"
+        android:text="Confirmar Cita"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorLink="#FFFFFF" />
 </LinearLayout>

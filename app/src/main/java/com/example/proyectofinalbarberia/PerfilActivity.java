@@ -490,9 +490,12 @@ public class PerfilActivity extends AppCompatActivity {
             Uri imageUri = data.getData();
             if (imageUri != null) {
                 eliminarImagenAnteriorYSubirNuevaImagen(imageUri);
+            } else {
+                Toast.makeText(this, "Error al seleccionar la imagen. Inténtalo de nuevo.", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
 
     private void eliminarImagenAnteriorYSubirNuevaImagen(Uri imageUri) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -502,7 +505,7 @@ public class PerfilActivity extends AppCompatActivity {
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
                         String previousImageUrl = documentSnapshot.getString("urlImagenPerfil");
-                        if (previousImageUrl != null) {
+                        if (previousImageUrl != null && !previousImageUrl.isEmpty()) {
                             StorageReference previousImageRef = FirebaseStorage.getInstance().getReferenceFromUrl(previousImageUrl);
                             previousImageRef.delete()
                                     .addOnSuccessListener(aVoid -> {
@@ -512,6 +515,7 @@ public class PerfilActivity extends AppCompatActivity {
                                         Toast.makeText(PerfilActivity.this, "Error al eliminar la imagen anterior: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         } else {
+                            // No hay imagen anterior, cargar directamente la nueva imagen
                             cargarNuevaImagen(imageUri);
                         }
                     })
@@ -522,6 +526,10 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     private void cargarNuevaImagen(Uri imageUri) {
+        if (imageUri == null) {
+            Toast.makeText(this, "Error: La URI de la imagen es nula.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference imageRef = storageRef.child("images/" + UUID.randomUUID().toString());
         imageRef.putFile(imageUri)

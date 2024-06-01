@@ -1,6 +1,7 @@
 package com.example.proyectofinalbarberia;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -21,8 +23,10 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FirestoreManager {
@@ -98,10 +102,10 @@ public class FirestoreManager {
 
             usuarioRef.update("barberias", FieldValue.arrayUnion(barberia.getNombre()))
                     .addOnSuccessListener(aVoid -> {
-                        //éxito
+                        // éxito
                     })
                     .addOnFailureListener(e -> {
-                        //error
+                        // error
                     });
         }
     }
@@ -130,14 +134,11 @@ public class FirestoreManager {
         });
     }
 
-    // Eliminar barbería
     public void eliminarBarberia(String idBarberia, String rolUsuario, final OnEliminarBarberiaListener listener) {
         if (rolUsuario != null && rolUsuario.equals("Dueño")) {
-            // Eliminar la barbería de la lista del usuario y de la colección Barberias
             eliminarBarberiaDeListaUsuario(idBarberia, rolUsuario, listener);
             eliminarBarberiaDeColeccion(idBarberia, listener);
         } else {
-            // Eliminar la barbería de la lista del usuario solamente
             eliminarBarberiaDeListaUsuario(idBarberia, rolUsuario, listener);
         }
     }
@@ -158,17 +159,15 @@ public class FirestoreManager {
                                 @SuppressWarnings("unchecked")
                                 List<String> barberias = (List<String>) document.get("barberias");
                                 if (barberias != null && barberias.contains(idBarberia)) {
-                                    barberias.remove(idBarberia); // Eliminar la barbería de la lista
+                                    barberias.remove(idBarberia);
 
                                     usuarioRef.update("barberias", barberias)
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()) {
-                                                        // Éxito
                                                         listener.onBarberiaEliminada();
                                                     } else {
-                                                        // Fallo
                                                         listener.onEliminarBarberiaError("Error al actualizar el documento del usuario");
                                                     }
                                                 }
@@ -201,26 +200,20 @@ public class FirestoreManager {
                 });
     }
 
-    // Modificar
     public void modificarBarberia(String idBarberia, Barberia barberiaModificada, final OnModificarBarberiaListener listener) {
-        // Actualizar los datos de la barbería en la colección "Barberias"
         firestoreInstance.collection("Barberias").document(idBarberia)
                 .set(barberiaModificada)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            // Éxito al modificar la barbería
                             listener.onBarberiaModificada();
                         } else {
-                            // Fallo al modificar la barbería
                             listener.onModificarBarberiaError("Error al modificar la barbería: " + task.getException().getMessage());
                         }
                     }
                 });
     }
-
-
 
     public interface OnEliminarBarberiaListener {
         void onBarberiaEliminada();
@@ -300,5 +293,55 @@ public class FirestoreManager {
     public interface AgregarBarberoCallback {
         void onBarberoAgregado();
         void onFalloAgregandoBarbero(String mensajeError);
+    }
+
+    public void agregarCitaAUsuario(String uidUsuario, String uidCita) {
+        DocumentReference usuarioRef = firestoreInstance.collection("Usuarios").document(uidUsuario);
+        usuarioRef.update("listaCitas", FieldValue.arrayUnion(uidCita))
+                .addOnSuccessListener(aVoid -> Log.d("FirestoreManager", "Cita agregada a la lista de usuario"))
+                .addOnFailureListener(e -> Log.e("FirestoreManager", "Error al agregar cita a la lista de usuario", e));
+    }
+
+    public void obtenerCitasDeUsuario(String uidUsuario, ObtenerCitasCallback callback) {
+        DocumentReference usuarioRef = firestoreInstance.collection("Usuarios").document(uidUsuario);
+        usuarioRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                List<String> listaCitas = (List<String>) documentSnapshot.get("listaCitas");
+                if (listaCitas != null) {
+                    callback.onCitasObtenidas(listaCitas);
+                } else {
+                    callback.onFallo("Lista de citas vacía");
+                }
+            } else {
+                callback.onFallo("Documento de usuario no encontrado");
+            }
+        }).addOnFailureListener(e -> callback.onFallo("Error al obtener citas del usuario: " + e.getMessage()));
+    }
+
+    public interface ObtenerCitasCallback {
+        void onCitasObtenidas(List<String> listaCitas);
+        void onFallo(String mensajeError);
+    }
+
+    public void obtenerCitasParaRol(String rol, String uid, ObtenerCitasCallback callback) {
+        CollectionReference citasRef = firestoreInstance.collection("Citas");
+        Query query;
+        if ("Dueño".equals(rol)) {
+            query = citasRef.whereEqualTo("idBarberia", uid);
+        } else if ("Barbero".equals(rol)) {
+            query = citasRef.whereEqualTo("idBarbero", uid);
+        } else { // Cliente
+            query = citasRef.whereEqualTo("idCliente", uid);
+        }
+
+        query.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<String> listaCitas = new ArrayList<>();
+            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                listaCitas.add(documentSnapshot.getId());
+            }
+            callback.onCitasObtenidas(listaCitas);
+        }).addOnFailureListener(e -> {
+            callback.onFallo(e.getMessage());
+        });
     }
 }

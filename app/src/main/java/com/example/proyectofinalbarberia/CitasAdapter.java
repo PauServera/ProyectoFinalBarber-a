@@ -7,22 +7,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Locale;
 import com.google.firebase.firestore.FirebaseFirestore;
-
+import java.util.List;
 
 public class CitasAdapter extends RecyclerView.Adapter<CitasAdapter.CitasViewHolder> {
-
     private List<Cita> listaCitas;
     private OnCitaInteractionListener listener;
-    private FirebaseFirestore db;
+    private String rolUsuario;
 
-    public CitasAdapter(List<Cita> listaCitas, OnCitaInteractionListener listener) {
+    public CitasAdapter(List<Cita> listaCitas, OnCitaInteractionListener listener, String rolUsuario) {
         this.listaCitas = listaCitas;
         this.listener = listener;
-        this.db = FirebaseFirestore.getInstance();
+        this.rolUsuario = rolUsuario;
     }
 
     @NonNull
@@ -35,7 +31,7 @@ public class CitasAdapter extends RecyclerView.Adapter<CitasAdapter.CitasViewHol
     @Override
     public void onBindViewHolder(@NonNull CitasViewHolder holder, int position) {
         Cita cita = listaCitas.get(position);
-        holder.bind(cita, listener, db);
+        holder.bind(cita, listener, rolUsuario);
     }
 
     @Override
@@ -44,29 +40,45 @@ public class CitasAdapter extends RecyclerView.Adapter<CitasAdapter.CitasViewHol
     }
 
     public static class CitasViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewFecha, textViewBarbero;
+        TextView textViewFecha, textViewHora, textViewBarbero, textViewCliente;
         Button btnEditar, btnCancelar;
 
         public CitasViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewFecha = itemView.findViewById(R.id.textViewFecha);
+            textViewHora = itemView.findViewById(R.id.textViewHora);
             textViewBarbero = itemView.findViewById(R.id.textViewBarbero);
+            textViewCliente = itemView.findViewById(R.id.textViewCliente);
             btnEditar = itemView.findViewById(R.id.btnEditar);
             btnCancelar = itemView.findViewById(R.id.btnCancelar);
         }
 
-        public void bind(Cita cita, OnCitaInteractionListener listener, FirebaseFirestore db) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-            textViewFecha.setText(sdf.format(cita.getFechaCita()));
+        public void bind(Cita cita, OnCitaInteractionListener listener, String rolUsuario) {
+            textViewFecha.setText("Fecha: " + cita.getFecha());
+            textViewHora.setText("Hora: " + cita.getHora());
 
-            // Obtener y mostrar el nombre del barbero
-            db.collection("Usuarios").document(cita.getIdBarbero()).get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            String nombreBarbero = documentSnapshot.getString("nombre");
-                            textViewBarbero.setText(nombreBarbero);
-                        }
-                    });
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("Usuarios").document(cita.getIdBarbero()).get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    String nombreBarbero = documentSnapshot.getString("nombre");
+                    textViewBarbero.setText("Barbero: " + nombreBarbero);
+                }
+            });
+
+            db.collection("Usuarios").document(cita.getIdCliente()).get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    String nombreCliente = documentSnapshot.getString("nombre");
+                    textViewCliente.setText("Cliente: " + nombreCliente);
+                }
+            });
+
+            if ("Cliente".equals(rolUsuario)) {
+                btnEditar.setVisibility(View.GONE);
+                btnCancelar.setVisibility(View.GONE);
+            } else {
+                btnEditar.setVisibility(View.VISIBLE);
+                btnCancelar.setVisibility(View.VISIBLE);
+            }
 
             btnEditar.setOnClickListener(v -> listener.onEditCita(cita));
             btnCancelar.setOnClickListener(v -> listener.onCancelCita(cita));
@@ -78,4 +90,12 @@ public class CitasAdapter extends RecyclerView.Adapter<CitasAdapter.CitasViewHol
         void onCancelCita(Cita cita);
     }
 }
+
+
+
+
+
+
+
+
 

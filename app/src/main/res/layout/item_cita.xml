@@ -1,38 +1,66 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/textViewFecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fecha"/>
+        android:text="Fecha: "
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/textViewHora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hora: "
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/textViewBarbero"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Barbero"/>
+        android:text="Barbero: "
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/textViewCliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cliente: "
+        android:textSize="16sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
 
         <Button
             android:id="@+id/btnEditar"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Editar"/>
+            android:backgroundTint="#AC0202"
+            android:text="Editar"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorLink="#FFFFFF" />
 
         <Button
             android:id="@+id/btnCancelar"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancelar"/>
+            android:layout_marginStart="16dp"
+            android:backgroundTint="#AC0202"
+            android:text="Cancelar"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorLink="#FFFFFF" />
     </LinearLayout>
 </LinearLayout>
+
+
+
+
