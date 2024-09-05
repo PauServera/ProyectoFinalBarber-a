@@ -212,43 +212,70 @@ Configura el RecyclerView para mostrar los datos de cada cita y filtrarlas.
 Estas actividades y componentes representan las funcionalidades principales de la aplicación, permitiendo la gestión de usuarios, barberos, barberías, citas y otros elementos clave.
 
 Pruebas y validación
+
 Introducción.
+
 El objetivo de esta sección es describir las pruebas realizadas para asegurar la calidad y el correcto funcionamiento del sistema BarberTeam. Se detallarán los diferentes tipos de pruebas, los métodos utilizados, los resultados obtenidos y las conclusiones derivadas de estas pruebas.
 Plan de Pruebas.
+
 Objetivos de las Pruebas:
+
 Verificar que todas las funcionalidades del sistema funcionan según lo esperado.
 Identificar y corregir errores y defectos en el software.
 Asegurar la usabilidad y la satisfacción del usuario final.
 Evaluar el rendimiento y la seguridad del sistema.
 
 Tipos de Pruebas:
+
 Pruebas Unitarias.
+
+
 Descripción: Pruebas realizadas sobre las unidades más pequeñas del código (métodos y funciones) de manera individual.
+
 Herramientas Utilizadas: JUnit para Java.
+
 Ejemplos de Casos de Prueba:
+
 Validación de la función de inicio de sesión.
+
 Prueba de la gestión de horarios.
+
 Verificación de la reserva y cancelación de citas.
+
 Pruebas Funcionales.
+
+
 Descripción: Verificación de que cada funcionalidad del sistema cumple con los requisitos especificados.
+
 Método: Realización manual de casos de uso específicos.
+
 Ejemplos de Casos de Prueba:
+
 Registro de usuarios (dueños, barberos y clientes).
 Inicio de sesión.
 Gestión de horarios y disponibilidad de citas.
 Reserva y cancelación de citas.
 Generación de informes semanales o mensuales.
+
 Pruebas de Usabilidad.
+
+
 Descripción: Evaluación de la facilidad de uso y la experiencia del usuario con la aplicación.
+
 Método: Observación directa y recopilación de feedback de usuarios que prueban la aplicación.
 Aspectos Evaluados:
+
 Facilidad de navegación en la aplicación.
 Claridad de la interfaz de usuario.
 Satisfacción general del usuario.
+
 Pruebas de Rendimiento.
+
 Descripción: Evaluación del rendimiento del sistema bajo diferentes condiciones de uso.
 Método: Ejecución manual de acciones repetitivas y monitoreo del tiempo de respuesta y la estabilidad.
+
 Métricas Evaluadas:
+
 Tiempo de respuesta del sistema.
 Comportamiento bajo múltiples solicitudes simultáneas.
 Pruebas de Seguridad.
@@ -259,10 +286,13 @@ Protección de datos de usuario.
 Autenticación y autorización.
 
 Mejoras Futuras
+
 Introducción.
+
 A medida que BarberTeam evoluciona, es importante considerar y planificar mejoras y características adicionales que puedan incrementar su valor y usabilidad. Este apartado describe posibles mejoras y extensiones que pueden implementarse en futuras versiones de la aplicación para continuar satisfaciendo las necesidades de los usuarios y mantenerse competitivos en el mercado.
 
 Mejoras Sugeridas.
+
 Optimización del Rendimiento.
 
 Descripción: Mejorar la eficiencia del sistema, especialmente bajo cargas altas, para asegurar un tiempo de respuesta rápido y una experiencia de usuario fluida.
@@ -277,6 +307,7 @@ Descripción: Permitir a los usuarios registrarse e iniciar sesión utilizando s
 Beneficios:
 Facilitar el proceso de registro e inicio de sesión.
 Incrementar la visibilidad y el alcance de la aplicación mediante la integración con plataformas populares.
+
 Módulo de Marketing y Promociones.
 
 Descripción: Desarrollar un módulo que permita a los propietarios de barberías crear y gestionar campañas de marketing y promociones dentro de la aplicación.
@@ -284,6 +315,7 @@ Características Incluidas:
 Envío de notificaciones push para promociones.
 Creación de cupones y descuentos.
 Análisis de la efectividad de las campañas de marketing.
+
 Sistema de Recomendaciones Personalizadas.
 
 Descripción: Implementar un sistema que ofrezca recomendaciones personalizadas de servicios y productos basados en el historial y preferencias del cliente.
@@ -309,7 +341,9 @@ Descripción: Integrar métodos de pago adicionales y permitir la gestión de pa
 Beneficios:
 Facilitar a los clientes la realización de pagos en línea.
 Ofrecer a los propietarios una herramienta para gestionar transacciones y facturación de manera eficiente.
+
 Bibliografía y Referencias
+
 Introducción.
 En esta sección se enumeran las fuentes de información y referencias bibliográficas que se han utilizado para la realización de este proyecto. Estas fuentes artículos, sitios web, y otras publicaciones relevantes que han contribuido al desarrollo de BarberTeam y a la fundamentación teórica y técnica del proyecto.
 Artículos.
