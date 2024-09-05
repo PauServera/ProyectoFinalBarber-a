@@ -1,4 +1,5 @@
 Introducción
+
 En el mundo actual, los avances tecnológicos están redefiniendo la forma en que interactuamos con los servicios y cambiando industrias, desde la atención médica hasta el entretenimiento. En este panorama dinámico, las barberías no son una excepción y están experimentando una evolución significativa en la forma en que operan sus negocios y atienden a sus clientes. La gestión eficaz de estas instalaciones se ha convertido en un aspecto importante para satisfacer la creciente demanda de servicios y optimizar el trabajo de los profesionales implicados.
 
 Para abordar esta necesidad, se lanza BarberTeam, un sistema de gestión integral diseñado específicamente para barberías. El sistema está diseñado no solo para simplificar las operaciones diarias de estas instalaciones, sino también para transformar la experiencia de propietarios, peluqueros y clientes. Este informe examina las principales capas de esta aplicación, las tecnologías avanzadas que la respaldan y el impacto que esta aplicación pretende tener en la gestión y personalización de los servicios prestados por las barberías.
@@ -9,6 +10,7 @@ En resumen, BarberTeam no solo es una respuesta a las demandas actuales del merc
 
 
 Objetivos
+
 1. Analizar el contexto y las tendencias actuales en la industria de las barberías: Investigar la evolución de las barberías, su importancia en la cultura contemporánea y los desafíos que enfrentan en un mundo cada vez más digitalizado.
 2. Evaluar las necesidades y demandas de gestión en las barberías: Identificar los problemas y áreas de mejora en la gestión de las barberías, tanto desde la perspectiva de los propietarios como de los barberos y clientes.
 3. Diseñar una solución integral de gestión para barberías: Desarrollar un sistema de gestión completo que aborde las necesidades identificadas, priorizando la eficiencia operativa, la comunicación mejorada y la experiencia del cliente.
