@@ -20,10 +20,13 @@ Objetivos
 
 
 Análisis de requisitos
+
 Introducción al análisis.
+
 El análisis de requisitos es una etapa fundamental en el proceso de desarrollo de software, ya que sienta las bases para el diseño, implementación y prueba de un sistema. El objetivo de los siguientes puntos es identificar, documentar y analizar exhaustivamente las necesidades y funcionalidades clave de la aplicación:
 
 Requisitos funcionales.
+
 Registro de usuarios (Dueños, Barberos y Clientes).
 Inicio de sesión.
 Gestión de horarios y disponibilidad de citas.
@@ -33,6 +36,7 @@ Gestión de citas.
 Generación de informes semanales o mensuales.
 
 Requisitos no funcionales.
+
 Seguridad de los datos del usuario.
 Intuición en la interfaz de usuario.
 Tiempo de respuesta del sistema.
@@ -41,14 +45,22 @@ Disponibilidad.
 
 
 Diseño de arquitectura
+
 Capa de presentación.
+
 En esta capa se maneja la interacción directa con el usuario y se controla cómo se muestra la información en la pantalla.
+
 Capa de lógica.
-Esta capa contiene las clases que definen la lógica central de la aplicación, su objetivo es encapsular la lógica de manera cohesiva y reutilizable, lo que facilita la modificación  y la prueba de la funcionalidad principal de la App.
+
+Esta capa contiene las clases que definen la lógica central de la aplicación, su objetivo es encapsular la lógica de manera cohesiva y reutilizable, lo que facilita la modificación  y la prueba de la 
+funcionalidad principal de la App.
+
 Capa de Acceso a Datos.
+
 Esta capa se encarga de interactuar con la base de datos, facilita la separación de las preocupaciones y mejora la modularidad de la App.
 
 Implementación.
+
 El marco teórico de este proyecto proporciona una base conceptual sólida que sustenta el desarrollo de BarberTeam, abordando los siguientes aspectos clave:
 
 1. Lenguajes de Programación.
@@ -64,6 +76,7 @@ Firebase Storage: Se utiliza para almacenar archivos multimedia, como imágenes 
 
 
 Funcionalidades
+
 1. MainActivity
 Función principal: Inicio de sesión.
 Detalles:
