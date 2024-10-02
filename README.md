@@ -407,24 +407,3 @@ Futuro Digitalizado.
 La implementación de BarberTeam representa un paso hacia la digitalización de las barberías, alineándose con las tendencias actuales del mercado y las expectativas de los clientes en un mundo cada vez más conectado.
 Conclusión.
 El desarrollo de BarberTeam ha sido un proyecto desafiante y gratificante que ha resultado en una aplicación innovadora y útil para la gestión de barberías. Los logros alcanzados y las lecciones aprendidas durante este proceso proporcionan una base sólida para futuras mejoras y expansiones de la aplicación. Con el continuo avance de la tecnología y las necesidades cambiantes del mercado, BarberTeam está bien posicionado para adaptarse y seguir ofreciendo valor a sus usuarios.
-
-
-Agradecimientos
-Quisiera expresar mi más sincero agradecimiento a todas las personas que me han apoyado y guiado durante el desarrollo de este proyecto. Sin su ayuda y orientación, este trabajo no habría sido posible.
-
-Profesores.
-Antoni Ginard:
-Profesor de Programación. Sus enseñanzas en programación han sido fundamentales para superar los desafíos técnicos y alcanzar los objetivos planteados.
-
-Oriol Gómez:
-Profesor de Gestión Empresarial y Desarrollo de Interfaces. Agradezco profundamente sus consejos y sugerencias que me ayudaron a mejorar la usabilidad y funcionalidad de BarberTeam. Su enfoque práctico y sus enseñanzas sobre gestión y diseño de interfaces han sido de gran inspiración y motivación.
-
-Germán Cantallops:
-Profesor de Acceso a Datos y tutor. Gracias por su paciencia y dedicación al ofrecer su experiencia y conocimientos. Su guía como tutor ha sido inestimable para mantener el enfoque y la calidad del trabajo.
-
-Otros Agradecimientos.
-A mi familia y amigos, por su constante apoyo y ánimo durante todo este proceso. Su confianza en mí me ha impulsado a seguir adelante y dar lo mejor de mí en cada etapa del proyecto.
-
-A todos los usuarios que participaron en las pruebas y ofrecieron su valioso feedback. Sus opiniones y sugerencias han sido cruciales para mejorar la aplicación y asegurar que satisface las necesidades reales de los usuarios finales.
-
-A mis compañeros de clase, por su colaboración y por ser una fuente de motivación y apoyo durante el desarrollo de este proyecto.
